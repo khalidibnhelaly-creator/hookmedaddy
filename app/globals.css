@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #F9F7F2;
+  --bg2: #F0EDE5;
+  --ink: #0F0E0B;
+  --muted: #6B6860;
+  --faint: #A8A69F;
+  --accent: #C8430F;
+  --accent2: #E8601F;
+  --dark: #0F0E0B;
+  --dark2: #1A1917;
+  --border: #E2DED4;
+  --white: #FEFCF8;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-serif { font-family: var(--font-serif), Georgia, serif; }
