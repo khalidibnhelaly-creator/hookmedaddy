@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     }
 
     const userMessage = buildUserMessageV2(body, profile.plan_tier)
-    const maxTokens = body.awarenessLevel === 'all_5_stages' ? 6000 : 2048
+    const maxTokens = body.awarenessLevel === "all_5_stages" ? 8000 : 4000
 
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
