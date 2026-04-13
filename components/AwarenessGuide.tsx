@@ -153,7 +153,7 @@ export default function AwarenessGuide() {
 
               <div style={{ marginBottom: 16 }}>
                 <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 8 }}>Example hook</div>
-                <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 15, color: 'var(--ink)', background: 'var(--dark)', padding: '16px 20px', borderRadius: 2, lineHeight: 1.6, color: 'rgba(255,255,255,0.75)' }}>
+                <div style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 15, background: 'var(--dark)', padding: '16px 20px', borderRadius: 2, lineHeight: 1.6, color: 'rgba(255,255,255,0.75)' }}>
                   {STAGES[active].hook}
                 </div>
               </div>
