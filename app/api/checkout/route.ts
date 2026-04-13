@@ -1,5 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
-import { stripe, PLANS } from '@/lib/stripe'
+import Stripe from 'stripe'
+import { PLANS } from '@/lib/stripe'
 import { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
@@ -9,6 +10,10 @@ export async function POST(req: NextRequest) {
   const { planKey } = await req.json()
   const plan = PLANS[planKey as keyof typeof PLANS]
   if (!plan) return Response.json({ error: 'invalid_plan' }, { status: 400 })
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: '2026-03-25.dahlia' as const,
+  })
 
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',

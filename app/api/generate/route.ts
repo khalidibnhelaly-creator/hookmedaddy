@@ -4,8 +4,6 @@ import { supabaseAdmin } from '@/lib/supabase'
 import { SYSTEM_PROMPT, buildUserMessage, buildUserMessageV2 } from '@/lib/prompt'
 import { NextRequest } from 'next/server'
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-
 export async function POST(req: NextRequest) {
   try {
     const { userId } = await auth()
@@ -13,8 +11,6 @@ export async function POST(req: NextRequest) {
     if (!userId) return Response.json({ error: 'unauthorized' }, { status: 401 })
 
     const body = await req.json()
-    console.log('BODY received:', JSON.stringify(body).slice(0, 100))
-
     const creditCost = body.contentType === 'video_script' ? 40 : body.awarenessLevel === 'all_5_stages' ? 80 : 20
 
     const { data: profile, error: profileError } = await supabaseAdmin
@@ -39,25 +35,23 @@ export async function POST(req: NextRequest) {
       .eq('clerk_user_id', userId)
 
     if (deductError) {
-      console.log('DEDUCT ERROR:', deductError)
       return Response.json({ error: 'credit_deduction_failed' }, { status: 500 })
     }
 
     const userMessage = buildUserMessageV2(body, profile.plan_tier)
     const maxTokens = body.awarenessLevel === 'all_5_stages' ? 6000 : 2048
 
-    console.log('Calling Anthropic API...')
+    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+
     const response = await client.messages.create({
-      model: 'claude-sonnet-4-5',
+      model: 'claude-haiku-4-5',
       max_tokens: maxTokens,
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: userMessage }],
     })
 
     const rawText = response.content[0].type === 'text' ? response.content[0].text : ''
-    console.log('RAW response length:', rawText.length)
-
-    const cleaned = rawText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim()
+    const cleaned = rawText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
     const parsed = JSON.parse(cleaned)
 
     await supabaseAdmin.from('hookme_generations').insert({
@@ -78,7 +72,7 @@ export async function POST(req: NextRequest) {
 
   } catch (e: unknown) {
     const error = e as Error
-    console.error('GENERATE ERROR:', error.message, error.stack)
+    console.error('GENERATE ERROR:', error.message)
     return Response.json({ success: false, error: 'generation_failed', detail: error.message }, { status: 500 })
   }
 }
