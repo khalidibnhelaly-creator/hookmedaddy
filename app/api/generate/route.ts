@@ -1,13 +1,12 @@
 import { auth } from '@clerk/nextjs/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { supabaseAdmin } from '@/lib/supabase'
-import { SYSTEM_PROMPT, buildUserMessage, buildUserMessageV2 } from '@/lib/prompt'
+import { SYSTEM_PROMPT, buildUserMessageV2 } from '@/lib/prompt'
 import { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
   try {
     const { userId } = await auth()
-    console.log('AUTH userId:', userId)
     if (!userId) return Response.json({ error: 'unauthorized' }, { status: 401 })
 
     const body = await req.json()
@@ -19,27 +18,21 @@ export async function POST(req: NextRequest) {
       .eq('clerk_user_id', userId)
       .single()
 
-    console.log('PROFILE:', profile, 'ERROR:', profileError)
-
     if (profileError || !profile) {
-      return Response.json({ error: 'profile_not_found', detail: profileError?.message }, { status: 404 })
+      return Response.json({ error: 'profile_not_found' }, { status: 404 })
     }
 
     if (profile.credits < creditCost) {
       return Response.json({ error: 'insufficient_credits' }, { status: 402 })
     }
 
-    const { error: deductError } = await supabaseAdmin
+    await supabaseAdmin
       .from('hookme_profiles')
       .update({ credits: profile.credits - creditCost })
       .eq('clerk_user_id', userId)
 
-    if (deductError) {
-      return Response.json({ error: 'credit_deduction_failed' }, { status: 500 })
-    }
-
     const userMessage = buildUserMessageV2(body, profile.plan_tier)
-    const maxTokens = body.awarenessLevel === "all_5_stages" ? 8000 : 4000
+    const maxTokens = body.awarenessLevel === 'all_5_stages' ? 10000 : 5000
 
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -51,8 +44,33 @@ export async function POST(req: NextRequest) {
     })
 
     const rawText = response.content[0].type === 'text' ? response.content[0].text : ''
-    const cleaned = rawText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
-    const parsed = JSON.parse(cleaned)
+    
+    // Clean JSON — remove markdown fences and find the JSON object
+    let cleaned = rawText
+      .replace(/```json\s*/gi, '')
+      .replace(/```\s*/gi, '')
+      .trim()
+
+    // If response contains text before the JSON, extract just the JSON
+    const jsonStart = cleaned.indexOf('{')
+    const jsonArrayStart = cleaned.indexOf('[')
+    
+    let jsonStr = cleaned
+    if (jsonStart > 0 && (jsonArrayStart === -1 || jsonStart < jsonArrayStart)) {
+      jsonStr = cleaned.slice(jsonStart)
+    } else if (jsonArrayStart > 0 && (jsonStart === -1 || jsonArrayStart < jsonStart)) {
+      jsonStr = cleaned.slice(jsonArrayStart)
+    }
+
+    // Find the last valid closing bracket
+    const lastBrace = jsonStr.lastIndexOf('}')
+    const lastBracket = jsonStr.lastIndexOf(']')
+    const lastValid = Math.max(lastBrace, lastBracket)
+    if (lastValid > 0) {
+      jsonStr = jsonStr.slice(0, lastValid + 1)
+    }
+
+    const parsed = JSON.parse(jsonStr)
 
     await supabaseAdmin.from('hookme_generations').insert({
       clerk_user_id: userId,
