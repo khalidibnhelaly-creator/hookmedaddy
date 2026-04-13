@@ -1,4 +1,4 @@
-import { stripe } from '@/lib/stripe'
+import Stripe from 'stripe'
 import { supabaseAdmin } from '@/lib/supabase'
 import { PLANS } from '@/lib/stripe'
 import { NextRequest } from 'next/server'
@@ -16,6 +16,10 @@ const PLAN_MAP: Record<string, string> = {
 }
 
 export async function POST(req: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: '2026-03-25.dahlia' as const,
+  })
+
   const body = await req.text()
   const sig = req.headers.get('stripe-signature')!
 
@@ -30,14 +34,11 @@ export async function POST(req: NextRequest) {
     const session = event.data.object as { metadata?: Record<string, string>; subscription?: string }
     const clerkUserId = session.metadata?.clerk_user_id
     const subscriptionId = session.subscription as string
-
     if (!clerkUserId) return Response.json({ received: true })
-
     const subscription = await stripe.subscriptions.retrieve(subscriptionId)
     const priceId = subscription.items.data[0].price.id
     const credits = CREDIT_MAP[priceId] || 500
     const planTier = PLAN_MAP[priceId] || 'starter'
-
     await supabaseAdmin.from('hookme_profiles').upsert({
       clerk_user_id: clerkUserId,
       plan_tier: planTier,
@@ -54,7 +55,6 @@ export async function POST(req: NextRequest) {
       const priceId = subscription.items.data[0].price.id
       const credits = CREDIT_MAP[priceId] || 500
       const planTier = PLAN_MAP[priceId] || 'starter'
-
       await supabaseAdmin.from('hookme_profiles')
         .update({ credits, plan_tier: planTier })
         .eq('stripe_subscription_id', invoice.subscription)
