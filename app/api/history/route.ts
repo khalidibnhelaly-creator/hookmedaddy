@@ -7,7 +7,7 @@ export async function GET() {
 
   const { data } = await supabaseAdmin
     .from('hookme_generations')
-    .select('id, created_at, product_name, platform, awareness_stage, content_type, credits_used')
+    .select('id, created_at, product_name, platform, awareness_stage, content_type, credits_used, output')
     .eq('clerk_user_id', userId)
     .order('created_at', { ascending: false })
     .limit(50)
