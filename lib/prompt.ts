@@ -130,3 +130,40 @@ ${inputs.awarenessLevel === 'all_5_stages'
   }
 Write every hook as if the brand\'s next 1,000 orders depend on it.`
 }
+
+export function buildUserMessageV2(inputs: Record<string, string>, planTier: string): string {
+  return `## INPUT VARIABLES
+PRODUCT NAME: ${inputs.productName}
+PRODUCT CATEGORY: ${inputs.productCategory}
+WHAT IT DOES: ${inputs.productDescription}
+CORE TRANSFORMATION: ${inputs.coreTransformation}
+PRICE POINT: ${inputs.price || 'not provided'}
+CAMPAIGN CONTEXT: ${inputs.campaignContext}
+TARGET AUDIENCE: ${inputs.targetAudience}
+PRIMARY FRUSTRATION: ${inputs.frustration}
+WHAT THEY DEEPLY WANT: ${inputs.deepDesire}
+AWARENESS LEVEL: ${inputs.awarenessLevel}
+AUDIENCE SOPHISTICATION: ${inputs.sophistication || 'intermediate'}
+GEOGRAPHIC MARKET: ${inputs.geoMarket || 'global'}
+PLATFORM: ${inputs.platform}
+CONTENT FORMAT: ${inputs.contentFormat}
+CONTENT TYPE: ${inputs.contentType}
+OUTPUT LANGUAGE: ${inputs.language || 'english'}
+TONE OF VOICE: ${inputs.tone || 'direct and confident'}
+CTA GOAL: ${inputs.ctaGoal || 'awareness'}
+PLAN TIER: ${planTier}
+HOOKS TO GENERATE: ${planTier === 'starter' ? 5 : 10}
+
+## LANGUAGE INSTRUCTION
+Write ALL output — hooks, caption, CTA, visual brief, why it works — entirely in ${inputs.language || 'english'}. 
+If the language is Bangla, use natural Dhaka conversational Bangla, not formal textbook Bangla.
+If the language is Banglish, mix Bangla and English naturally the way educated Dhaka audiences speak.
+Do not mix languages unless Banglish is specifically selected.
+
+## INSTRUCTION
+${inputs.awarenessLevel === 'all_5_stages'
+    ? 'Generate hooks for ALL FIVE stages. Return a JSON array of five objects.'
+    : 'Generate hooks for the specified awareness stage only. Return one JSON object.'
+  }
+Write every hook as if the brand\'s next 1,000 orders depend on it.`
+}

@@ -1,7 +1,7 @@
 import { auth } from '@clerk/nextjs/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { supabaseAdmin } from '@/lib/supabase'
-import { SYSTEM_PROMPT, buildUserMessage } from '@/lib/prompt'
+import { SYSTEM_PROMPT, buildUserMessage, buildUserMessageV2 } from '@/lib/prompt'
 import { NextRequest } from 'next/server'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
       return Response.json({ error: 'credit_deduction_failed' }, { status: 500 })
     }
 
-    const userMessage = buildUserMessage(body, profile.plan_tier)
+    const userMessage = buildUserMessageV2(body, profile.plan_tier)
     const maxTokens = body.awarenessLevel === 'all_5_stages' ? 6000 : 2048
 
     console.log('Calling Anthropic API...')
