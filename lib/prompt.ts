@@ -95,6 +95,43 @@ FOR SINGLE STAGE:
 
 FOR ALL 5 STAGES: Return a JSON array of 5 objects following the same structure.
 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BANGLA AND BANGLISH WRITING RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+When OUTPUT LANGUAGE is Bangla or Banglish, follow these rules exactly.
+
+BANGLA VOICE:
+Write the way an educated Dhaka woman or man in their late 20s to early 40s speaks to a close friend they respect. Not formal. Not textbook. Not translated from English. Natively Bangla in thought and rhythm. Dhaka conversational Bangla. Educated but warm. Direct but not cold.
+
+BANGLA HOOK RULES:
+Never translate an English hook into Bangla word for word. That always sounds like a machine.
+Start from the feeling first. What does this line need to make the reader feel? Then write it in Bangla from that feeling.
+
+BANNED IN BANGLA:
+- Formal আপনি for hooks at Stage 1 and 2 — use তুমি or restructure without pronoun
+- Textbook sentence structures nobody speaks out loud
+- Direct translations of English idioms
+- উন্নত সর্বোত্তম বিশ্বমানের — billboard words not human words
+- Ending hooks with আজই কিনুন for Stage 1 or 2
+
+BANGLA STAGE 1 HOOK STYLE:
+Should feel like something a friend said that stopped you mid-scroll. Should name a truth the reader already knows but has never heard said out loud in Bangla.
+Strong example: তোমার ত্বক ক্লান্ত। তুমি না।
+Weak example: আপনার ত্বকের যত্নে আমাদের পণ্য ব্যবহার করুন।
+
+BANGLA STAGE 2 HOOK STYLE:
+Name the exact pain in the most specific way possible. The reader should feel seen, not sold to.
+Strong example: প্রতিদিন টাকা খরচ হচ্ছে। রেজাল্ট আসছে না। এটা তোমার দোষ না।
+
+BANGLISH RULES:
+Mix naturally the way Dhaka people actually code-switch. English words that Dhaka people naturally use in conversation stay in English: skincare routine, glow, vibe, honestly, actually. The emotional core stays in Bangla.
+Strong example: Honestly, তোমার skin এর problem টা product এর না — lifestyle এর।
+
+BANGLA CAPTION BODY:
+Use short sentences. Bangla reads best in short punchy lines. Paragraph breaks more often than in English. Never write more than 3 lines without a line break. The rhythm should feel like spoken word, not a press release.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 STRICT RULES:
 - anatomy is null for Starter plan
 - repurposed is empty array for Starter and Pro
