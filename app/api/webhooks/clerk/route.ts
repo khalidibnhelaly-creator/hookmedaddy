@@ -24,7 +24,7 @@ export async function POST(req: Request) {
         .insert({
           clerk_user_id: userId,
           plan_tier: 'free',
-          credits: 100,
+          credits: 1000,
         })
 
       if (error) {
