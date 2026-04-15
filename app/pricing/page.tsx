@@ -26,11 +26,11 @@ const PLANS = [
   {
     name: 'Starter',
     price: 19,
-    credits: 500,
+    credits: 20000,
     period: 'per month',
     description: 'For solo brand owners.',
     features: [
-      '500 credits per month',
+      '20000 credits per month',
       'All Free features',
       '5 hooks per generation',
       'Single awareness stage',
@@ -45,11 +45,11 @@ const PLANS = [
   {
     name: 'Pro',
     price: 49,
-    credits: 1500,
+    credits: 9000,
     period: 'per month',
     description: 'For performance marketers.',
     features: [
-      '1500 credits per month',
+      '9000 credits per month',
       'All Starter features',
       '10 hooks per generation',
       'All 5 stages at once',
@@ -65,11 +65,11 @@ const PLANS = [
   {
     name: 'Agency',
     price: 99,
-    credits: 5000,
+    credits: 20000,
     period: 'per month',
     description: 'For agencies and teams.',
     features: [
-      '5000 credits per month',
+      '20000 credits per month',
       'All Pro features',
       'Multi-brand workspaces',
       '5 team seats included',
