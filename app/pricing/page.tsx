@@ -26,11 +26,11 @@ const PLANS = [
   {
     name: 'Starter',
     price: 19,
-    credits: 20000,
+    credits: 5000,
     period: 'per month',
     description: 'For solo brand owners.',
     features: [
-      '20000 credits per month',
+      '5000 credits per month',
       'All Free features',
       '5 hooks per generation',
       'Single awareness stage',
