@@ -17,7 +17,7 @@ export default async function Home() {
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
           <Link href="/sign-up" style={{ background: 'var(--accent)', color: '#fff', padding: '13px 28px', borderRadius: 2, textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>
-            Start free — 100 credits
+            Start free — 1000 credits
           </Link>
           <Link href="/sign-in" style={{ background: 'transparent', color: 'var(--ink)', padding: '13px 28px', borderRadius: 2, textDecoration: 'none', fontSize: 13, fontWeight: 500, border: '1px solid var(--border)' }}>
             Sign in
