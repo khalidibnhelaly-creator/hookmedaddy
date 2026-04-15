@@ -13,7 +13,7 @@ export default async function Home() {
           Hook<span style={{ color: 'var(--accent)' }}>Me</span>Daddy
         </div>
         <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 40, fontWeight: 300 }}>
-          The world's most awareness-calibrated copy engine for ecommerce brands. Built on the Schwartz Pyramid of Awareness.
+          Copy that knows who it's talking to.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
           <Link href="/sign-up" style={{ background: 'var(--accent)', color: '#fff', padding: '13px 28px', borderRadius: 2, textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>
