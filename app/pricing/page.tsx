@@ -137,7 +137,7 @@ export default function PricingPage() {
     script.id = 'paddle-js'
     script.src = 'https://cdn.paddle.com/paddle/v2/paddle.js'
     script.onload = () => {
-      window.Paddle.Initialize({ token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN! })
+      window.Paddle.Initialize({ token: 'live_823e30c6a41a4ab3d03d44c38d3' })
       setPaddleReady(true)
     }
     document.head.appendChild(script)
