@@ -1,16 +1,19 @@
 'use client'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 
 const PLANS = [
   {
     name: 'Free',
-    price: 0,
-    credits: 1000,
-    period: 'one time',
+    monthlyPrice: 0,
+    yearlyPrice: 0,
+    monthlyCredits: 1000,
+    yearlyCredits: 1000,
+    yearlyTotal: 0,
+    discount: 0,
+    discountAmount: 0,
     description: 'Try the full engine.',
     features: [
-      '1000 credits on signup',
+      '1,000 credits on signup',
       '20 credits per social post',
       '40 credits per video script',
       'All 5 awareness stages',
@@ -25,18 +28,23 @@ const PLANS = [
   },
   {
     name: 'Starter',
-    price: 19,
-    credits: 5000,
-    period: 'per month',
+    monthlyPrice: 19,
+    yearlyPrice: 179,
+    monthlyCredits: 5000,
+    yearlyCredits: 60000,
+    yearlyTotal: 228,
+    discount: 21.49,
+    discountAmount: 49,
     description: 'For solo brand owners.',
     features: [
-      '5000 credits per month',
-      'All Free features',
+      '5,000 credits per month',
+      '60,000 credits per year',
       '5 hooks per generation',
       'Single awareness stage',
       'Visual brief included',
       'Campaign context engine',
       'A/B hook variants',
+      'English and Bangla',
     ],
     cta: 'Get Starter',
     href: '/sign-up',
@@ -44,15 +52,19 @@ const PLANS = [
   },
   {
     name: 'Pro',
-    price: 49,
-    credits: 9000,
-    period: 'per month',
+    monthlyPrice: 49,
+    yearlyPrice: 449,
+    monthlyCredits: 9000,
+    yearlyCredits: 108000,
+    yearlyTotal: 588,
+    discount: 23.64,
+    discountAmount: 139,
     description: 'For performance marketers.',
     features: [
-      '9000 credits per month',
-      'All Starter features',
+      '9,000 credits per month',
+      '108,000 credits per year',
       '10 hooks per generation',
-      'All 5 stages at once',
+      'All 5 awareness stages at once',
       'Video and reel script mode',
       'Hook anatomy breakdown',
       'Save and organise library',
@@ -64,13 +76,18 @@ const PLANS = [
   },
   {
     name: 'Agency',
-    price: 99,
-    credits: 20000,
-    period: 'per month',
+    monthlyPrice: 99,
+    yearlyPrice: 769,
+    monthlyCredits: 20000,
+    yearlyCredits: 240000,
+    yearlyTotal: 1188,
+    discount: 35.27,
+    discountAmount: 419,
     description: 'For agencies and teams.',
     features: [
-      '20000 credits per month',
-      'All Pro features',
+      '20,000 credits per month',
+      '240,000 credits per year',
+      'Everything in Pro',
       'Multi-brand workspaces',
       '5 team seats included',
       'White-label PDF export',
@@ -84,12 +101,11 @@ const PLANS = [
 ]
 
 export default function PricingPage() {
-  const router = useRouter()
+  const [billing, setBilling] = useState<'monthly' | 'yearly'>('monthly')
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', fontFamily: 'var(--font-sans)' }}>
 
-      {/* Nav */}
       <nav style={{ borderBottom: '1px solid var(--border)', padding: '0 40px', height: 58, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <a href="/" style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: 'var(--ink)', textDecoration: 'none', fontWeight: 400 }}>
           Hook<span style={{ color: 'var(--accent)' }}>Me</span>Daddy
@@ -99,74 +115,121 @@ export default function PricingPage() {
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '80px 40px' }}>
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: 64 }}>
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 16 }}>Pricing</div>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 48, fontWeight: 400, letterSpacing: '-1px', lineHeight: 1.1, marginBottom: 16 }}>
             Start free. Scale when ready.
           </h1>
-          <p style={{ fontSize: 16, color: 'var(--muted)', maxWidth: 480, margin: '0 auto' }}>
-            No credit card required to start. 1000 free credits on signup. Cancel anytime.
+          <p style={{ fontSize: 16, color: 'var(--muted)', maxWidth: 480, margin: '0 auto 32px' }}>
+            No credit card required to start. 1,000 free credits on signup. Cancel anytime.
           </p>
-        </div>
 
-        {/* Plans grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
-          {PLANS.map((plan) => (
-            <div key={plan.name} style={{
-              background: plan.highlight ? 'var(--ink)' : 'white',
-              border: `1px solid ${plan.highlight ? 'var(--ink)' : 'var(--border)'}`,
-              borderRadius: 4,
-              padding: '32px 24px',
-              position: 'relative',
-              display: 'flex',
-              flexDirection: 'column',
-            }}>
-              {plan.highlight && (
-                <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', background: 'var(--accent)', color: 'white', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '4px 12px', borderRadius: 2 }}>
-                  Most popular
-                </div>
-              )}
-
-              <div style={{ marginBottom: 24 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: plan.highlight ? 'rgba(255,255,255,0.5)' : 'var(--muted)', marginBottom: 8 }}>{plan.name}</div>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 4 }}>
-                  <span style={{ fontFamily: 'var(--font-serif)', fontSize: 40, color: plan.highlight ? 'white' : 'var(--ink)', fontWeight: 400 }}>${plan.price}</span>
-                  {plan.price > 0 && <span style={{ fontSize: 13, color: plan.highlight ? 'rgba(255,255,255,0.5)' : 'var(--muted)' }}>/mo</span>}
-                </div>
-                <div style={{ fontSize: 12, color: plan.highlight ? 'rgba(255,255,255,0.6)' : 'var(--muted)' }}>{plan.credits.toLocaleString()} credits {plan.period}</div>
-                <div style={{ fontSize: 13, color: plan.highlight ? 'rgba(255,255,255,0.7)' : 'var(--muted)', marginTop: 8 }}>{plan.description}</div>
-              </div>
-
-              <div style={{ flex: 1, marginBottom: 24 }}>
-                {plan.features.map((f) => (
-                  <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 10 }}>
-                    <span style={{ color: plan.highlight ? 'var(--accent)' : 'var(--accent)', fontSize: 14, marginTop: 1 }}>✓</span>
-                    <span style={{ fontSize: 13, color: plan.highlight ? 'rgba(255,255,255,0.8)' : 'var(--ink)', lineHeight: 1.4 }}>{f}</span>
-                  </div>
-                ))}
-              </div>
-
-              <a href={plan.href} style={{
-                display: 'block',
-                textAlign: 'center',
-                padding: '12px',
-                fontSize: 13,
-                fontWeight: 600,
-                borderRadius: 2,
-                textDecoration: 'none',
-                background: plan.highlight ? 'var(--accent)' : 'transparent',
-                color: plan.highlight ? 'white' : 'var(--ink)',
-                border: `1px solid ${plan.highlight ? 'var(--accent)' : 'var(--border)'}`,
-                transition: 'opacity 0.15s',
+          {/* Toggle */}
+          <div style={{ display: 'inline-flex', alignItems: 'center', background: 'white', border: '1px solid var(--border)', borderRadius: 4, padding: 4, gap: 4 }}>
+            <button
+              onClick={() => setBilling('monthly')}
+              style={{
+                padding: '8px 20px', fontSize: 13, fontWeight: 600, borderRadius: 2, border: 'none', cursor: 'pointer',
+                background: billing === 'monthly' ? 'var(--ink)' : 'transparent',
+                color: billing === 'monthly' ? 'white' : 'var(--muted)',
+                transition: 'all 0.15s',
               }}>
-                {plan.cta}
-              </a>
-            </div>
-          ))}
+              Monthly
+            </button>
+            <button
+              onClick={() => setBilling('yearly')}
+              style={{
+                padding: '8px 20px', fontSize: 13, fontWeight: 600, borderRadius: 2, border: 'none', cursor: 'pointer',
+                background: billing === 'yearly' ? 'var(--ink)' : 'transparent',
+                color: billing === 'yearly' ? 'white' : 'var(--muted)',
+                transition: 'all 0.15s',
+                display: 'flex', alignItems: 'center', gap: 8,
+              }}>
+              Yearly
+              <span style={{ background: 'var(--accent)', color: 'white', fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 2 }}>
+                Save up to 35%
+              </span>
+            </button>
+          </div>
         </div>
 
-        {/* Credit calculator */}
+        {/* Plans */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+          {PLANS.map((plan) => {
+            const price = billing === 'yearly' ? plan.yearlyPrice : plan.monthlyPrice
+            const credits = billing === 'yearly' ? plan.yearlyCredits : plan.monthlyCredits
+            const showDiscount = billing === 'yearly' && plan.discount > 0
+
+            return (
+              <div key={plan.name} style={{
+                background: plan.highlight ? 'var(--ink)' : 'white',
+                border: `1px solid ${plan.highlight ? 'var(--ink)' : 'var(--border)'}`,
+                borderRadius: 4,
+                padding: '32px 24px',
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+              }}>
+                {plan.highlight && (
+                  <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', background: 'var(--accent)', color: 'white', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '4px 12px', borderRadius: 2, whiteSpace: 'nowrap' }}>
+                    Most popular
+                  </div>
+                )}
+
+                <div style={{ marginBottom: 24 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: plan.highlight ? 'rgba(255,255,255,0.5)' : 'var(--muted)', marginBottom: 8 }}>{plan.name}</div>
+
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 4 }}>
+                    <span style={{ fontFamily: 'var(--font-serif)', fontSize: 40, color: plan.highlight ? 'white' : 'var(--ink)', fontWeight: 400 }}>
+                      {price === 0 ? 'Free' : `$${price}`}
+                    </span>
+                    {price > 0 && (
+                      <span style={{ fontSize: 13, color: plan.highlight ? 'rgba(255,255,255,0.5)' : 'var(--muted)' }}>
+                        /{billing === 'yearly' ? 'year' : 'mo'}
+                      </span>
+                    )}
+                  </div>
+
+                  {showDiscount && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                      <span style={{ fontSize: 12, color: plan.highlight ? 'rgba(255,255,255,0.4)' : 'var(--muted)', textDecoration: 'line-through' }}>
+                        ${plan.yearlyTotal}/year
+                      </span>
+                      <span style={{ background: plan.highlight ? 'var(--accent)' : '#E8F5E9', color: plan.highlight ? 'white' : '#2E7D32', fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 2 }}>
+                        Save ${plan.discountAmount} ({plan.discount}% off)
+                      </span>
+                    </div>
+                  )}
+
+                  <div style={{ fontSize: 12, color: plan.highlight ? 'rgba(255,255,255,0.6)' : 'var(--muted)', marginTop: 4 }}>
+                    {credits.toLocaleString()} credits {billing === 'yearly' ? 'per year' : 'per month'}
+                  </div>
+                  <div style={{ fontSize: 13, color: plan.highlight ? 'rgba(255,255,255,0.7)' : 'var(--muted)', marginTop: 8 }}>{plan.description}</div>
+                </div>
+
+                <div style={{ flex: 1, marginBottom: 24 }}>
+                  {plan.features.map((f) => (
+                    <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 10 }}>
+                      <span style={{ color: 'var(--accent)', fontSize: 14, marginTop: 1, flexShrink: 0 }}>✓</span>
+                      <span style={{ fontSize: 13, color: plan.highlight ? 'rgba(255,255,255,0.8)' : 'var(--ink)', lineHeight: 1.4 }}>{f}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <a href={plan.href} style={{
+                  display: 'block', textAlign: 'center', padding: '12px', fontSize: 13, fontWeight: 600, borderRadius: 2, textDecoration: 'none',
+                  background: plan.highlight ? 'var(--accent)' : 'transparent',
+                  color: plan.highlight ? 'white' : 'var(--ink)',
+                  border: `1px solid ${plan.highlight ? 'var(--accent)' : 'var(--border)'}`,
+                }}>
+                  {plan.cta}
+                </a>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Credit costs */}
         <div style={{ marginTop: 64, background: 'white', border: '1px solid var(--border)', borderRadius: 4, padding: '40px' }}>
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 12 }}>Credit costs</div>
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 24, fontWeight: 400, marginBottom: 24 }}>How credits work</h2>
@@ -190,11 +253,11 @@ export default function PricingPage() {
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 400, marginBottom: 32, textAlign: 'center' }}>Common questions</h2>
           <div style={{ maxWidth: 640, margin: '0 auto' }}>
             {[
-              { q: 'Do unused credits roll over?', a: 'Free tier credits do not expire. Paid plan credits reset monthly.' },
-              { q: 'Can I cancel anytime?', a: 'Yes. Cancel from your account settings. No questions asked.' },
+              { q: 'Do unused credits roll over?', a: 'Free tier credits do not expire. Monthly paid plan credits reset each month. Yearly plan credits are available for the full year.' },
+              { q: 'Can I cancel anytime?', a: 'Yes. Cancel from your account settings anytime. No questions asked.' },
               { q: 'What languages are supported?', a: 'English and Bangla with native cultural intelligence. More languages coming.' },
-              { q: 'What is the Schwartz Pyramid?', a: 'Eugene Schwartz mapped five stages of buyer awareness in Breakthrough Advertising (1966). Every stage requires a fundamentally different message. HookMeDaddy is built on this framework.' },
-              { q: 'Is there a refund policy?', a: 'Yes. See our refund policy for full details.' },
+              { q: 'What is the Schwartz Pyramid?', a: 'Eugene Schwartz mapped five stages of buyer awareness in Breakthrough Advertising (1966). Every stage requires a fundamentally different message. HookMeDaddy is built entirely on this framework.' },
+              { q: 'Is there a refund policy?', a: 'Yes. If the Service did not work as described, you get your money back. See our refund policy for full details.' },
             ].map((item) => (
               <div key={item.q} style={{ borderBottom: '1px solid var(--border)', padding: '20px 0' }}>
                 <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink)', marginBottom: 8 }}>{item.q}</div>
@@ -203,11 +266,9 @@ export default function PricingPage() {
             ))}
           </div>
         </div>
-
       </div>
 
-      {/* Footer */}
-      <footer style={{ borderTop: '1px solid var(--border)', padding: '32px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <footer style={{ borderTop: '1px solid var(--border)', padding: '32px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
         <div style={{ fontFamily: 'var(--font-serif)', fontSize: 15, color: 'var(--ink)' }}>Hook<span style={{ color: 'var(--accent)' }}>Me</span>Daddy</div>
         <div style={{ display: 'flex', gap: 24 }}>
           {[['About', '/about'], ['Terms', '/terms'], ['Privacy', '/privacy'], ['Refund', '/refund']].map(([label, href]) => (
