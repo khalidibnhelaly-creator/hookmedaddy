@@ -65,7 +65,7 @@ export default function AwarenessGuide() {
 
   return (
     <>
-      <button
+      <button type="button"
         onClick={() => setOpen(true)}
         style={{
           fontSize: 11, fontWeight: 600, color: 'var(--accent)',
