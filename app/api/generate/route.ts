@@ -36,56 +36,75 @@ export async function POST(req: NextRequest) {
 
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
-    const response = await client.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: maxTokens,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: userMessage }],
+    const encoder = new TextEncoder()
+    let fullText = ''
+
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          const anthropicStream = await client.messages.stream({
+            model: 'claude-haiku-4-5',
+            max_tokens: maxTokens,
+            system: SYSTEM_PROMPT,
+            messages: [{ role: 'user', content: userMessage }],
+          })
+
+          for await (const chunk of anthropicStream) {
+            if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
+              fullText += chunk.delta.text
+              controller.enqueue(encoder.encode(chunk.delta.text))
+            }
+          }
+
+          let cleaned = fullText
+            .replace(/```json\s*/gi, '')
+            .replace(/```\s*/gi, '')
+            .trim()
+
+          const jsonStart = cleaned.indexOf('{')
+          const jsonArrayStart = cleaned.indexOf('[')
+          let jsonStr = cleaned
+
+          if (jsonStart > 0 && (jsonArrayStart === -1 || jsonStart < jsonArrayStart)) {
+            jsonStr = cleaned.slice(jsonStart)
+          } else if (jsonArrayStart > 0 && (jsonStart === -1 || jsonArrayStart < jsonStart)) {
+            jsonStr = cleaned.slice(jsonArrayStart)
+          }
+
+          const lastBrace = jsonStr.lastIndexOf('}')
+          const lastBracket = jsonStr.lastIndexOf(']')
+          const lastValid = Math.max(lastBrace, lastBracket)
+          if (lastValid > 0) jsonStr = jsonStr.slice(0, lastValid + 1)
+
+          const parsed = JSON.parse(jsonStr)
+
+          await supabaseAdmin.from('hookme_generations').insert({
+            clerk_user_id: userId,
+            credits_used: creditCost,
+            content_type: body.contentType,
+            platform: body.platform,
+            awareness_stage: body.awarenessLevel,
+            product_name: body.productName,
+            output: parsed,
+          })
+
+          controller.enqueue(encoder.encode(`\n__DONE__${JSON.stringify({ success: true, data: parsed, credits_remaining: profile.credits - creditCost })}`))
+          controller.close()
+
+        } catch (err) {
+          const e = err as Error
+          controller.enqueue(encoder.encode(`\n__ERROR__${e.message}`))
+          controller.close()
+        }
+      }
     })
 
-    const rawText = response.content[0].type === 'text' ? response.content[0].text : ''
-    
-    // Clean JSON — remove markdown fences and find the JSON object
-    let cleaned = rawText
-      .replace(/```json\s*/gi, '')
-      .replace(/```\s*/gi, '')
-      .trim()
-
-    // If response contains text before the JSON, extract just the JSON
-    const jsonStart = cleaned.indexOf('{')
-    const jsonArrayStart = cleaned.indexOf('[')
-    
-    let jsonStr = cleaned
-    if (jsonStart > 0 && (jsonArrayStart === -1 || jsonStart < jsonArrayStart)) {
-      jsonStr = cleaned.slice(jsonStart)
-    } else if (jsonArrayStart > 0 && (jsonStart === -1 || jsonArrayStart < jsonStart)) {
-      jsonStr = cleaned.slice(jsonArrayStart)
-    }
-
-    // Find the last valid closing bracket
-    const lastBrace = jsonStr.lastIndexOf('}')
-    const lastBracket = jsonStr.lastIndexOf(']')
-    const lastValid = Math.max(lastBrace, lastBracket)
-    if (lastValid > 0) {
-      jsonStr = jsonStr.slice(0, lastValid + 1)
-    }
-
-    const parsed = JSON.parse(jsonStr)
-
-    await supabaseAdmin.from('hookme_generations').insert({
-      clerk_user_id: userId,
-      credits_used: creditCost,
-      content_type: body.contentType,
-      platform: body.platform,
-      awareness_stage: body.awarenessLevel,
-      product_name: body.productName,
-      output: parsed,
-    })
-
-    return Response.json({
-      success: true,
-      data: parsed,
-      credits_remaining: profile.credits - creditCost
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Transfer-Encoding': 'chunked',
+        'X-Accel-Buffering': 'no',
+      },
     })
 
   } catch (e: unknown) {

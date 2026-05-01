@@ -63,16 +63,38 @@ export default function Dashboard() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
-      const data = await res.json()
-      if (data.success) {
-        setOutput(data.data)
-        setCredits(data.credits_remaining)
-      } else if (data.error === 'insufficient_credits') {
-        alert('Not enough credits. Please upgrade your plan.')
-        router.push('/pricing')
-      } else {
+
+      const ok = res.ok
+      const body = res.body
+      if (!ok || !body) {
         alert('Generation failed. Please try again.')
+        return
       }
+
+      const reader = body.getReader()
+      const decoder = new TextDecoder()
+      let fullText = ''
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        fullText += decoder.decode(value, { stream: true })
+
+        if (fullText.includes('__DONE__')) {
+          const doneIndex = fullText.indexOf('__DONE__')
+          const jsonStr = fullText.slice(doneIndex + 8)
+          const data = JSON.parse(jsonStr)
+          setOutput(data.data)
+          setCredits(data.credits_remaining)
+          break
+        }
+
+        if (fullText.includes('__ERROR__')) {
+          alert('Generation failed. Please try again.')
+          break
+        }
+      }
+
     } catch {
       alert('Something went wrong. Please try again.')
     } finally {
