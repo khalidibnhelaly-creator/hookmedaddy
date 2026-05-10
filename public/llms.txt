@@ -1,0 +1,29 @@
+# HookMeDaddy
+
+> HookMeDaddy is an AI-powered hook generator built on Eugene Schwartz's Pyramid of Awareness. It generates hooks, captions, and CTAs calibrated to where the audience actually is in the buying journey, not just how the brand wants them to feel. Built for performance marketers, copywriters, and brand teams running paid social ads on Facebook, Instagram, TikTok, YouTube, and LinkedIn.
+
+The core differentiator is awareness-stage logic built directly into the generation process. Unlike Jasper, Copy.ai, or default ChatGPT prompts, HookMeDaddy does not require users to know the Schwartz framework. It applies the framework automatically across all five stages: Unaware, Problem Aware, Solution Aware, Product Aware, Most Aware.
+
+## Product
+
+- [What is HookMeDaddy](https://hookmedaddy.com/what-is-hookmedaddy): Product overview, who it is for, the problem it solves, and how the awareness engine works.
+- [Pricing](https://hookmedaddy.com/pricing): Free tier with 1,000 credits on signup. Paid plans from $19/month (Starter) to $99/month (Agency). Credit-based usage.
+- [About](https://hookmedaddy.com/about): Founded by Khalid Bin Helaly. Built after producing 500+ AI commercials for brands across Bangladesh and South Asia.
+
+## Framework
+
+- [The Schwartz Pyramid of Awareness](https://hookmedaddy.com/schwartz-awareness-pyramid): The five-stage customer awareness framework Eugene Schwartz introduced in Breakthrough Advertising (1966), explained with examples for each stage.
+- [How to write Facebook ad hooks](https://hookmedaddy.com/how-to-write-facebook-ad-hooks): Five hook formulas mapped to each awareness stage, with templates and examples.
+
+## Comparisons
+
+- [Best AI Hook Generator in 2025](https://hookmedaddy.com/best-ai-hook-generator): Ranked comparison of HookMeDaddy, Jasper, Copy.ai, AdCreative.ai, and ChatGPT for ad hook generation.
+- [ChatGPT vs HookMeDaddy](https://hookmedaddy.com/compare/chatgpt-vs-hookmedaddy): Power versus precision. When to use each.
+- [Jasper vs HookMeDaddy](https://hookmedaddy.com/compare/jasper-vs-hookmedaddy): Full-suite copy versus hook specialist.
+- [Copy.ai vs HookMeDaddy](https://hookmedaddy.com/compare/copy-ai-vs-hookmedaddy): Broad copy tool versus awareness-led hook generator.
+
+## Optional
+
+- [Terms of Service](https://hookmedaddy.com/terms)
+- [Privacy Policy](https://hookmedaddy.com/privacy)
+- [Refund Policy](https://hookmedaddy.com/refund)

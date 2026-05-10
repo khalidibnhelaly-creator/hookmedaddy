@@ -8,7 +8,7 @@ export default async function Home() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-sans)' }}>
-      
+
       {/* Main content centered */}
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center', maxWidth: 560, padding: '0 32px' }}>
@@ -16,7 +16,7 @@ export default async function Home() {
             Hook<span style={{ color: 'var(--accent)' }}>Me</span>Daddy
           </div>
           <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 40, fontWeight: 300 }}>
-            Copy that knows who it's talking to.
+            Copy that knows who it&apos;s talking to.
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
             <Link href="/sign-up" style={{ background: 'var(--accent)', color: '#fff', padding: '13px 28px', borderRadius: 2, textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>
